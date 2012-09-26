@@ -49,11 +49,19 @@ class Dnode {
    * @throws \DnodeSyncClient\IOException
    * @throws \DnodeSyncClient\ProtocolException
    */
-  public function connect($host, $port) {
+  public function connect($host, $port, $connectTimeout=false) {
     $address = "tcp://$host:$port";
-    $stream = @\stream_socket_client($address);
+    if(!$connectTimeout) {
+      $stream = @\stream_socket_client($address, $errNo, $errStr);
+    } else {
+      $stream = @\stream_socket_client($address, $errNo, $errStr, $connectTimeout);
+    }
     if (!$stream) {
-      throw new IOException("Can't create socket to $address");
+      throw new IOException("Can't create socket to $address. Error: $errNo) $errStr");
+    }
+
+    if($connectTimeout) {
+      stream_set_timeout($stream, $connectTimeout);
     }
 
     return new Connection($stream);
