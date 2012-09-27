@@ -51,9 +51,9 @@ class Dnode {
   public function connect($host, $port, $connectTimeout=false) {
     $address = "tcp://$host:$port";
     if(!$connectTimeout) {
-      $stream = stream_socket_client($address, $errNo, $errStr);
+      @$stream = stream_socket_client($address, $errNo, $errStr);
     } else {
-      $stream = stream_socket_client($address, $errNo, $errStr, $connectTimeout);
+      @$stream = stream_socket_client($address, $errNo, $errStr, $connectTimeout);
     }
     if (!$stream) {
       throw new IOException("Can't create socket to $address. Error: $errNo) $errStr");
