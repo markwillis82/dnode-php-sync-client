@@ -146,7 +146,7 @@ class Connection {
     if (!in_array($method, $this->methods)) {
       throw new MethodNotExistsException("Method $method does not exists on remote.");
     }
-    $callbacks = new \stdclass();
+    $callbacks = new stdclass();
     $callbacks->{++$this->callbackNumber} = array(count($arguments));
 
     fwrite($this->stream, json_encode(array(
